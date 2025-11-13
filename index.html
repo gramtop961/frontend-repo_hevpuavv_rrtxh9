@@ -3,16 +3,244 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flames App</title>
-    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <title>Analytical Celebration of a PhD Completion</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%231a1a1a' d='M32 6l26 10-26 10L6 16 32 6zm0 24l18-7v15c0 9.94-8.06 18-18 18S14 47.94 14 38V23l18 7z'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root{
+        --bg: #f3f4f6; /* light gray */
+        --paper: #f8f5e6; /* cream */
+        --ink: #1f2937; /* gray-800 */
+        --muted: #4b5563; /* gray-600 */
+        --accent: #7c3aed; /* violet-600 */
+        --accent-ink: #4c1d95; /* violet-900 */
+        --border: #e5e7eb; /* gray-200 */
+        --callout: #fbf7ff; /* soft violet */
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body{
+        margin:0;
+        font-family: 'Lora', Georgia, serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.6;
+      }
+      a{ color: var(--accent-ink); text-decoration: none; }
+      a:hover{ text-decoration: underline; }
+
+      /* Tiny top navigation */
+      .topnav{
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(249, 250, 251, 0.6);
+        backdrop-filter: blur(6px);
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9rem;
+      }
+      .topnav .inner{
+        max-width: 980px; margin: 0 auto; padding: 8px 14px; display:flex; gap:14px; flex-wrap: wrap; align-items:center; justify-content:center;
+      }
+      .topnav a{ color: #374151; opacity: 0.9; }
+      .topnav a:hover{ opacity: 1; }
+
+      /* Centered paper card */
+      .wrap{
+        min-height: 100dvh;
+        display: grid; place-items: start center;
+        padding: 18px 12px 60px;
+      }
+      .paper{
+        width: 100%;
+        max-width: 960px;
+        background: var(--paper);
+        padding: clamp(18px, 3.5vw, 38px);
+        border: 1px solid #e9e4d6;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 2px 0 rgba(0,0,0,0.03) inset;
+        background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+        background-size: 6px 6px;
+      }
+
+      h1, h2, h3{ font-family: 'Playfair Display', Georgia, serif; color: #0f172a; line-height: 1.25; }
+      h1{ font-size: clamp(1.6rem, 2.8vw, 2.6rem); margin: 6px 0 2px; }
+      .subtitle{ font-size: clamp(1rem, 1.6vw, 1.2rem); color: var(--muted); margin-bottom: 14px; }
+      .meta{ font-size: 0.95rem; color: #374151; border-top: 1px solid #e6e2d5; border-bottom: 1px solid #e6e2d5; padding: 10px 0; display:flex; flex-wrap:wrap; gap:10px; justify-content: space-between; }
+      .meta .aff{ opacity: 0.9; }
+      .meta .history{ font-size: 0.92rem; color:#555; }
+
+      /* Sections */
+      section{ scroll-margin-top: 64px; }
+      .sec{ padding: 14px 0 10px; border-bottom: 1px dashed #ded9c8; }
+      .sec:last-of-type{ border-bottom: none; }
+      .lead{ color:#374151; max-width: 68ch; }
+
+      /* Event details grid */
+      .grid{
+        display:grid; gap: 10px; grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+      .grid .cell{
+        background: rgba(255,255,255,0.6); border: 1px solid #eadfbe; border-radius: 8px; padding: 10px 12px;
+      }
+      .cell .label{ font-variant: small-caps; letter-spacing: 0.04em; color:#6b7280; font-size: 0.85rem; }
+      .cell .value{ font-weight: 600; color:#111827; }
+
+      /* Callout */
+      .callout{
+        background: var(--callout);
+        border: 1px solid #e7dbff;
+        border-left: 4px solid var(--accent);
+        border-radius: 8px;
+        padding: 12px 14px;
+        color: #3b0764;
+      }
+
+      /* Gallery */
+      .gallery{
+        display:grid; gap: 10px; grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+      figure{ margin:0; background:#fff; border:1px solid #eadfbe; border-radius:10px; overflow:hidden; }
+      figure img{ width:100%; height: 180px; object-fit: cover; display:block; }
+      figcaption{ font-size: 0.9rem; color:#4b5563; padding: 8px 10px; border-top:1px solid #f0e8cd; background: #fffcf4; }
+
+      /* RSVP */
+      .rsvp-btn{
+        display:inline-block; padding: 12px 18px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #9b5cff); color:#fff; font-weight:700; letter-spacing: 0.02em; box-shadow: 0 6px 16px rgba(124,58,237,0.35);
+      }
+      .rsvp-btn:hover{ filter: brightness(1.05); text-decoration: none; }
+      .qr{ display:block; margin: 14px auto 0; width: 160px; height:160px; }
+
+      /* Footer */
+      footer{ text-align:center; color:#6b7280; font-size: 0.9rem; margin-top: 20px; padding-top: 12px; border-top:1px solid #e6e2d5; }
+
+      /* Responsive */
+      @media (min-width: 720px){
+        .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+        .gallery{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+        figure img{ height: 200px; }
+      }
+      @media (max-width: 420px){
+        .topnav .inner{ justify-content: flex-start; overflow-x:auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .subtitle{ font-size: 1rem; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- Tiny top navigation -->
+    <nav class="topnav" aria-label="Section Navigation">
+      <div class="inner">
+        <a href="#abstract">Abstract</a>
+        <a href="#introduction">Introduction</a>
+        <a href="#experimental">Experimental Details</a>
+        <a href="#results">Results &amp; Discussion</a>
+        <a href="#gallery">Visual Dataset (Gallery)</a>
+        <a href="#materials">Materials &amp; Methods (RSVP)</a>
+      </div>
+    </nav>
+
+    <main class="wrap">
+      <article class="paper" role="article">
+        <header>
+          <h1>Analytical Celebration of a PhD Completion</h1>
+          <p class="subtitle">A Reception in Honor of Dr. [My Full Name]</p>
+          <div class="meta">
+            <div class="aff"><strong>Author:</strong> Dr. [My Full Name] — Department of Analytical Chemistry, [University], [City]</div>
+            <div class="history">Article history: Received [MM DD, YYYY] • Accepted [MM DD, YYYY] • Published [MM DD, YYYY]</div>
+          </div>
+        </header>
+
+        <section id="abstract" class="sec" aria-labelledby="h-abstract">
+          <h2 id="h-abstract">Abstract</h2>
+          <p class="lead">This work reports a high-yield synthesis of joy following the successful defense of a doctoral thesis in Analytical Chemistry. Using rigorous controls (snacks) and reproducible conditions (music), we demonstrate that community presence significantly enhances celebration intensity. Confidence intervals indicate dancing may occur.</p>
+        </section>
+
+        <section id="introduction" class="sec" aria-labelledby="h-intro">
+          <h2 id="h-intro">Introduction</h2>
+          <p>After years of calibrations, dilutions, and just the right amount of noise reduction, the hypothesis that perseverance predicts discovery has been robustly supported. This paper therefore invites peers, mentors, friends, and family to evaluate these findings over refreshments and conversation.</p>
+        </section>
+
+        <section id="experimental" class="sec" aria-labelledby="h-exp">
+          <h2 id="h-exp">Experimental Details</h2>
+          <div class="grid" role="list">
+            <div class="cell" role="listitem">
+              <div class="label">Date</div>
+              <div class="value">[Day, Month DD, YYYY]</div>
+            </div>
+            <div class="cell" role="listitem">
+              <div class="label">Time</div>
+              <div class="value">[Start] – [End]</div>
+            </div>
+            <div class="cell" role="listitem">
+              <div class="label">Location</div>
+              <div class="value">[Venue], [Address], [City]</div>
+            </div>
+            <div class="cell" role="listitem">
+              <div class="label">Dress Code</div>
+              <div class="value">Smart casual with lab-safe flair</div>
+            </div>
+            <div class="cell" role="listitem">
+              <div class="label">RSVP by</div>
+              <div class="value">[RSVP Date]</div>
+            </div>
+            <div class="cell" role="listitem">
+              <div class="label">Notes</div>
+              <div class="value">Light refreshments and significant gratitude provided</div>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:12px">Reminder: Please RSVP to ensure accurate sample size and resource allocation. Statistical power depends on you!</div>
+        </section>
+
+        <section id="results" class="sec" aria-labelledby="h-results">
+          <h2 id="h-results">Results &amp; Discussion</h2>
+          <p>Preliminary analyses suggest a positive correlation between reunion frequency and happiness yield. Side reactions (spontaneous speeches) are expected but manageable. Attendees may experience elevated nostalgia; mitigation strategies include group photos and dessert.</p>
+        </section>
+
+        <section id="gallery" class="sec" aria-labelledby="h-gallery">
+          <h2 id="h-gallery">Visual Dataset (Gallery)</h2>
+          <div class="gallery">
+            <figure>
+              <img alt="Instrument calibration" src="https://images.unsplash.com/photo-1759846865520-7ebe2baaa759?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxJbnN0cnVtZW50JTIwY2FsaWJyYXRpb258ZW58MHwwfHx8MTc2MzAxMzg0MHww&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" />
+              <figcaption>Fig. 1. Early calibration: aligning curiosity with instrumentation.</figcaption>
+            </figure>
+            <figure>
+              <img alt="Chromatography" src="https://images.unsplash.com/photo-1748281296151-b3209b37e1cb?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxDaHJvbWF0b2dyYXBoeXxlbnwwfDB8fHwxNzYzMDEzODQxfDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" />
+              <figcaption>Fig. 2. Chromatographic peaks of perseverance over time.</figcaption>
+            </figure>
+            <figure>
+              <img alt="Lab notebook" src="https://images.unsplash.com/photo-1720879996903-24859d1df48f?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxMYWIlMjBub3RlYm9va3xlbnwwfDB8fHwxNzYzMDEzODQxfDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" />
+              <figcaption>Fig. 3. The lab notebook: where hypotheses met coffee stains.</figcaption>
+            </figure>
+            <figure>
+              <img alt="Micropipette" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop" />
+              <figcaption>Fig. 4. Pipetting accuracy improves with celebration prospects.</figcaption>
+            </figure>
+            <figure>
+              <img alt="Teamwork" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1200&auto=format&fit=crop" />
+              <figcaption>Fig. 5. Collaborators and co-authors: the true catalysts.</figcaption>
+            </figure>
+            <figure>
+              <img alt="Graduation" src="https://images.unsplash.com/photo-1462536943532-57a629f6cc60?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxHcmFkdWF0aW9ufGVufDB8MHx8fDE3NjMwMTM4NDJ8MA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" />
+              <figcaption>Fig. 6. Endpoint detected: successful defense and new beginnings.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="materials" class="sec" aria-labelledby="h-materials">
+          <h2 id="h-materials">Materials &amp; Methods (RSVP)</h2>
+          <p class="lead">Method: click the button, complete the short form, and submit. Materials: enthusiasm, one calendar, optionally a celebratory accessory.</p>
+          <p>
+            <a class="rsvp-btn" href="https://example.com/rsvp" target="_blank" rel="noopener">RSVP Now</a>
+          </p>
+          <img class="qr" alt="RSVP QR code" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fexample.com%2Frsvp" />
+        </section>
+
+        <footer>
+          Corresponding author: Dr. [My Full Name], [email] • DOI: 10.0000/celebration.analytical-chemistry.phd
+        </footer>
+      </article>
+    </main>
   </body>
 </html>
